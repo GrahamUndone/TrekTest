@@ -1,0 +1,57 @@
+﻿
+@{
+    ViewBag.Title = "Test";
+}
+<h2>Test</h2>
+<div class="col-md-12">
+    <ul class="list-group list-inline col-md-6">
+        <li class="list-group-item">
+            <div class="col-md-12">
+                <div class="bike-names col-md-10"></div>
+                <div class="bike-count col-md-2"></div>
+            </div>
+        </li>
+    </ul>
+</div>
+
+@section scripts
+{
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        var list = $('ul.list-group'),
+            li = $('li.list-group-item');
+
+        $.ajax({
+            type: 'get',
+            url: '/api/bikes/GetBikes',
+            success: function (data) {
+
+                $.each(data, function (idx, item) {
+
+                    var row = li.clone(true, true),
+                        names = row.find('.bike-names'),
+                        count = row.find('.bike-count');
+
+                    $.each(item.BikeName, function (i, name) {
+                        names.append(name + ', ');
+                    });
+
+                    count.append(item.BikeCount);
+
+                    list.append(row);
+                });
+
+                li.hide();
+            },
+            error: function (xhr, text, error) {
+                alert(error);
+            }
+        });
+    });
+   
+</script>    
+}
+
+
